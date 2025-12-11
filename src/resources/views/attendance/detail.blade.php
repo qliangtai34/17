@@ -8,30 +8,23 @@
     <table class="table table-bordered">
         <tr>
             <th>出勤</th>
-            <td>{{ $attendance->clock_in }}</td>
+            <td>{{ $attendance->clock_in ?? '—' }}</td>
         </tr>
+
         <tr>
             <th>退勤</th>
-            <td>{{ $attendance->clock_out }}</td>
+            <td>{{ $attendance->clock_out ?? '—' }}</td>
         </tr>
 
-        {{-- 休憩一覧 --}}
         <tr>
-    <th>休憩</th>
-    <td>
-        @php
-            // null の場合は空配列に変換
-            $breaks = $attendance->breaks ?? [];
-        @endphp
+            <th>休憩開始</th>
+            <td>{{ $attendance->break_start ?? '—' }}</td>
+        </tr>
 
-        @forelse ($breaks as $break)
-            {{ $break['break_start'] }} 〜 {{ $break['break_end'] ?? '' }}<br>
-        @empty
-            —
-        @endforelse
-    </td>
-</tr>
-
+        <tr>
+            <th>休憩終了</th>
+            <td>{{ $attendance->break_end ?? '—' }}</td>
+        </tr>
 
         <tr>
             <th>備考</th>
@@ -43,14 +36,12 @@
 
     {{-- ⭐ 承認待ちなら編集不可 --}}
     @if ($correction && $correction->status === 'pending')
-
         <div class="alert alert-warning">
             承認待ちのため修正はできません。
         </div>
-
     @else
 
-        {{-- ✔ 修正可能な場合のみフォームを表示 --}}
+        {{-- ✔ 修正可能な場合のみフォーム表示 --}}
         <form action="{{ route('attendance.requestCorrection', $attendance->id) }}" method="POST">
             @csrf
 
@@ -65,9 +56,13 @@
             </div>
 
             <div class="mb-3">
-                <label>休憩（修正後）</label>
-                <textarea name="new_breaks" class="form-control" rows="3"
-                    placeholder="09:00-09:10 のように入力"></textarea>
+                <label>休憩開始（修正後）</label>
+                <input type="datetime-local" name="new_break_start" class="form-control">
+            </div>
+
+            <div class="mb-3">
+                <label>休憩終了（修正後）</label>
+                <input type="datetime-local" name="new_break_end" class="form-control">
             </div>
 
             <div class="mb-3">
@@ -79,6 +74,5 @@
         </form>
 
     @endif
-
 </div>
 @endsection

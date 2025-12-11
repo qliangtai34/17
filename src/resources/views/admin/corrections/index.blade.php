@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
 
-    <h2>修正申請一覧（管理者）</h2>
+    <h2 class="mb-3">修正申請一覧（管理者）</h2>
 
     {{-- タブ切り替え --}}
     <div class="mb-3">
@@ -15,6 +15,11 @@
         <a href="{{ route('admin.corrections.index', ['status' => 'approved']) }}"
            class="btn {{ $status === 'approved' ? 'btn-primary' : 'btn-outline-primary' }}">
             承認済み
+        </a>
+
+        <a href="{{ route('admin.corrections.index', ['status' => 'rejected']) }}"
+           class="btn {{ $status === 'rejected' ? 'btn-primary' : 'btn-outline-secondary' }}">
+            却下済み
         </a>
     </div>
 
@@ -31,13 +36,21 @@
 
         @forelse($corrections as $correction)
             <tr>
-                <td>{{ $correction->user->name }}</td>
-                <td>{{ $correction->attendance->date }}</td>
+                <td>{{ optional($correction->user)->name ?? '—' }}</td>
+
                 <td>
-                    出勤: {{ $correction->new_clock_in ?? '—' }}<br>
-                    退勤: {{ $correction->new_clock_out ?? '—' }}<br>
-                    備考: {{ $correction->new_note ?? '—' }}
+                    {{ optional($correction->attendance)->date
+                        ? \Carbon\Carbon::parse($correction->attendance->date)->format('Y-m-d')
+                        : '—' }}
                 </td>
+
+                <td>
+                    出勤: {{ $correction->new_clock_in  ?? '—' }}<br>
+                    退勤: {{ $correction->new_clock_out ?? '—' }}<br>
+                    休憩: {{ $correction->new_breaks     ?? '—' }}<br>
+                    備考: {{ $correction->new_note       ?? '—' }}
+                </td>
+
                 <td>
                     <a href="{{ route('admin.corrections.show', $correction->id) }}"
                        class="btn btn-sm btn-info">

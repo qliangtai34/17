@@ -14,32 +14,27 @@ class Attendance extends Model
         'date',
         'clock_in',
         'clock_out',
-        'breaks',   // ← 忘れず追加
+        'break_start',   // ★ 追加
+        'break_end',     // ★ 追加
         'note',
         'status',
     ];
 
-    /**
-     * キャスト設定
-     */
     protected $casts = [
         'date'        => 'date',
         'clock_in'    => 'datetime',
         'clock_out'   => 'datetime',
-        'breaks'      => 'array',   // ← JSON を配列として扱う
+        'break_start' => 'datetime',   // ★ 追加
+        'break_end'   => 'datetime',   // ★ 追加
     ];
 
-    /**
-     * ユーザーとのリレーション
-     */
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
     public function corrections()
-{
-    return $this->hasMany(AttendanceCorrection::class);
-}
-
+    {
+        return $this->hasMany(AttendanceCorrection::class);
+    }
 }

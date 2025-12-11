@@ -90,6 +90,10 @@ Route::middleware(['auth', 'admin'])->group(function() {
     Route::get('/admin/attendances', [\App\Http\Controllers\AdminAttendanceController::class, 'index'])
         ->name('admin.attendances');
 
+    // 日付変更（前日／翌日）
+    Route::get('/admin/attendances/{date}', [\App\Http\Controllers\AdminAttendanceController::class, 'index'])
+    ->name('admin.attendances.date');    
+
     // 全ユーザーの一覧（FN041）
     Route::get('/admin/users', [\App\Http\Controllers\Admin\UserController::class, 'index'])
         ->name('admin.users.index');
@@ -114,4 +118,16 @@ Route::middleware(['auth', 'admin'])->group(function() {
     // 却下処理
     Route::post('/admin/corrections/{id}/reject', [\App\Http\Controllers\Admin\CorrectionController::class, 'reject'])
         ->name('admin.corrections.reject');
+
+    Route::get('/admin/attendances/{id}', 
+        [\App\Http\Controllers\AdminAttendanceController::class, 'show'])
+        ->name('admin.attendance.show');
+
+    Route::post('/admin/attendances/{id}/update',
+        [\App\Http\Controllers\AdminAttendanceController::class, 'update'])
+        ->name('admin.attendance.update');
+        
+    // 勤怠詳細
+    Route::get('/admin/attendance/{id}', [\App\Http\Controllers\AdminAttendanceController::class, 'show'])
+    ->name('admin.attendance.detail');    
 });
