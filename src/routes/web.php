@@ -124,10 +124,10 @@ Route::middleware(['auth', 'admin'])->group(function() {
         ->name('admin.attendance.show');
 
     Route::post('/admin/attendances/{id}/update',
-        [\App\Http\Controllers\AdminAttendanceController::class, 'update'])
+        [\App\Http\Controllers\Admin\AttendanceController::class, 'update'])
         ->name('admin.attendance.update');
         
     // 勤怠詳細
     Route::get('/admin/attendance/{id}', [\App\Http\Controllers\AdminAttendanceController::class, 'show'])
-    ->name('admin.attendance.detail');    
+    ->name('御堂筋');    
 });

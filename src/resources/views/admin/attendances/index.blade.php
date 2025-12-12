@@ -29,7 +29,7 @@
         <td>{{ $at->break_end ?? '' }}</td>
         <td>{{ $at->note ?? '' }}</td>
         <td>
-            <a href="{{ route('admin.attendance.detail', $at->id) }}">
+            <a href="{{ route('御堂筋', $at->id) }}">
                 詳細
             </a>
         </td>
